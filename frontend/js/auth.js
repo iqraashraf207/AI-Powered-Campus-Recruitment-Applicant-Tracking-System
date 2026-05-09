@@ -60,6 +60,40 @@ function setNavbarName() {
   if (el) el.textContent = getName();
 }
 
+function initModernMenu() {
+  const navbars = document.querySelectorAll('.navbar');
+  navbars.forEach(function(navbar) {
+    const links = navbar.querySelector('.navbar-links');
+    if (!links || navbar.querySelector('.menu-toggle')) return;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'menu-toggle';
+    toggle.setAttribute('aria-label', 'Toggle navigation menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<span></span><span></span><span></span>';
+
+    const userSection = navbar.querySelector('.navbar-user');
+    if (userSection) {
+      navbar.insertBefore(toggle, userSection);
+    } else {
+      navbar.appendChild(toggle);
+    }
+
+    toggle.addEventListener('click', function() {
+      const isOpen = navbar.classList.toggle('navbar-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    links.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navbar.classList.remove('navbar-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  });
+}
+
 async function loadCompanies() {
   try {
     const res  = await fetch(API + '/jobs/companies/all');
@@ -200,3 +234,5 @@ if (registerForm) {
     }
   });
 }
+
+initModernMenu();
