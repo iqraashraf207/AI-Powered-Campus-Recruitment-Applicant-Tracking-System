@@ -172,8 +172,8 @@ async function loadMyJobs() {
               '<div style="font-size:11px; color:#dc2626; margin-bottom:4px;">REJECTED</div>' +
               '<div style="font-size:20px; font-weight:700; color:#dc2626;">' + (j.rejected_count || 0) + '</div></div>' +
               '<div style="background:#ede9fe; border-radius:8px; padding:12px; text-align:center;">' +
-'<div style="font-size:11px; color:#6d28d9; margin-bottom:4px;">ACCEPTED</div>' +
-             '<div style="font-size:20px; font-weight:700; color:#6d28d9;">' + (j.accepted_count || 0) + '</div></div>' +
+'<div style="font-size:11px; color:#4338ca; margin-bottom:4px;">ACCEPTED</div>' +
+             '<div style="font-size:20px; font-weight:700; color:#4338ca;">' + (j.accepted_count || 0) + '</div></div>' +
               '</div></div>';
       }).join('');
   } catch (err) {
@@ -271,7 +271,7 @@ async function loadApplicants() {
       }
       tbody.innerHTML = applicants.map(function (a, i) {
           const rankColors = ['#f59e0b', '#94a3b8', '#cd7c3a'];
-          const rankColor = rankColors[i] || '#7c3aed';
+          const rankColor = rankColors[i] || '#4f46e5';
           const score = a.match_score != null ? parseFloat(a.match_score) : null;
           const date = new Date(a.apply_date).toLocaleDateString('en-GB', {
               day: 'numeric', month: 'short', year: 'numeric'
@@ -383,7 +383,7 @@ async function loadEligibleStudents() {
           students.map(function (s) {
               const statusColor = {
                   'submitted': '#64748b',
-                  'shortlisted': '#6d28d9',
+                  'shortlisted': '#4338ca',
                   'accepted': '#16a34a',
                   'rejected': '#dc2626',
                   'not applied': '#94a3b8'
@@ -444,7 +444,7 @@ async function loadAuditLog() {
               // Format action for readability
               const action = l.action.replace(/_/g, ' ');
               return '<tr>' +
-                  '<td style="font-size:12px; color:#6d28d9; font-weight:600;">' + action + '</td>' +
+                  '<td style="font-size:12px; color:#4338ca; font-weight:600;">' + action + '</td>' +
                   '<td>' + l.application_id + '</td>' +
                   '<td>' + (l.performed_by_name || 'System') + '</td>' +
                   '<td style="font-size:12px; color:#64748b;">' + ts + '</td>' +

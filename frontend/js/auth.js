@@ -56,6 +56,91 @@ function setNavbarName() {
     if (el) el.textContent = getName();
 }
 
+/**
+ * Injects hamburger toggle and toggles `.navbar-links` on small screens (CSS breakpoint).
+ */
+function initMobileNav() {
+    document.querySelectorAll('.navbar').forEach(function (navbar) {
+        var links = navbar.querySelector('.navbar-links');
+        if (!links || navbar.querySelector('.mobile-nav-toggle')) {
+            return;
+        }
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mobile-nav-toggle';
+        btn.setAttribute('aria-label', 'Open menu');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<span></span><span></span><span></span>';
+
+        var userSection = navbar.querySelector('.navbar-user');
+        if (userSection) {
+            navbar.insertBefore(btn, userSection);
+        } else {
+            navbar.appendChild(btn);
+        }
+
+        function closeMenu() {
+            navbar.classList.remove('navbar-mobile-open');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-label', 'Open menu');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = navbar.classList.toggle('navbar-mobile-open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        });
+
+        links.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', closeMenu);
+        });
+    });
+
+    if (!window.__campusMobileNavBound) {
+        window.__campusMobileNavBound = true;
+
+        document.addEventListener('click', function (ev) {
+            document.querySelectorAll('.navbar-mobile-open').forEach(function (navbar) {
+                if (!navbar.contains(ev.target)) {
+                    var b = navbar.querySelector('.mobile-nav-toggle');
+                    navbar.classList.remove('navbar-mobile-open');
+                    if (b) {
+                        b.setAttribute('aria-expanded', 'false');
+                        b.setAttribute('aria-label', 'Open menu');
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key !== 'Escape') return;
+            document.querySelectorAll('.navbar-mobile-open').forEach(function (navbar) {
+                var b = navbar.querySelector('.mobile-nav-toggle');
+                navbar.classList.remove('navbar-mobile-open');
+                if (b) {
+                    b.setAttribute('aria-expanded', 'false');
+                    b.setAttribute('aria-label', 'Open menu');
+                }
+            });
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                document.querySelectorAll('.navbar-mobile-open').forEach(function (navbar) {
+                    var b = navbar.querySelector('.mobile-nav-toggle');
+                    navbar.classList.remove('navbar-mobile-open');
+                    if (b) {
+                        b.setAttribute('aria-expanded', 'false');
+                        b.setAttribute('aria-label', 'Open menu');
+                    }
+                });
+            }
+        });
+    }
+}
+
 // Toggle between selecting existing company and creating a new one
 function toggleCompanyMode(mode) {
     const selectFields = document.getElementById('select-company-fields');
@@ -247,3 +332,5 @@ if (registerForm) {
         }
     });
 }
+
+initMobileNav();

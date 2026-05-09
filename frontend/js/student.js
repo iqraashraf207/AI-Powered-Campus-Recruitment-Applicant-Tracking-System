@@ -306,7 +306,7 @@ async function loadApplications() {
           tbody.innerHTML =
               '<tr><td colspan="6" style="text-align:center; padding:40px; color:#64748b;">' +
               'You have not applied to any jobs yet. ' +
-              '<a href="/student/jobs.html" style="color:#6d28d9; font-weight:600;">Browse Jobs</a>' +
+              '<a href="/student/jobs.html" style="color:#4f46e5; font-weight:600;">Browse Jobs</a>' +
               '</td></tr>';
           return;
       }
@@ -354,7 +354,7 @@ async function loadRecommendations() {
               '<div style="display:flex; justify-content:space-between; align-items:flex-start;">' +
               '<div style="flex:1;">' +
               '<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">' +
-              '<span style="background:#7c3aed; color:white; width:26px; height:26px; border-radius:50%;' +
+              '<span style="background:#4f46e5; color:white; width:26px; height:26px; border-radius:50%;' +
               'display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;">' +
               (i + 1) + '</span>' +
               '<h3 style="font-size:16px; font-weight:700; color:#1e293b;">' + r.rec_title + '</h3>' +
