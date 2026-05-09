@@ -1,103 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Profile — CampusRecruit</title>
-  <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <title>My Profile | CampusRecruit</title>
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
+
 <body>
-
-<nav class="navbar">
-  <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
-  <ul class="navbar-links">
-    <li><a href="/student/dashboard.html">Dashboard</a></li>
-    <li><a href="/student/jobs.html">Browse Jobs</a></li>
-    <li><a href="/student/applications.html">My Applications</a></li>
-    <li><a href="/student/recommendations.html">Recommendations</a></li>
-    <li><a href="/student/profile.html" class="active">Profile</a></li>
-  </ul>
-  <div class="navbar-user">
-    <span id="navbar-name"></span>
-    <button class="btn-logout" onclick="logout()">Logout</button>
-  </div>
-</nav>
-
-<div class="container">
-  <div class="page-title">My Profile</div>
-  <div class="page-subtitle">Keep your profile updated for better job matches</div>
-
-  <div class="grid-2">
-
-    <!-- Profile Details -->
-    <div>
-      <div class="card">
-        <div class="card-title">Personal Details</div>
-        <div id="alert-profile" class="alert"></div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="profile-name" disabled
-                 style="background:#f8fafc; color:#64748b;" />
+    <nav class="navbar">
+        <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
+        <ul class="navbar-links">
+            <li><a href="/student/dashboard.html">Dashboard</a></li>
+            <li><a href="/student/jobs.html">Browse Jobs</a></li>
+            <li><a href="/student/applications.html">My Applications</a></li>
+            <li><a href="/student/recommendations.html">Recommendations</a></li>
+            <li><a href="/student/profile.html" class="active">Profile</a></li>
+        </ul>
+        <div class="navbar-user">
+            <span id="navbar-name"></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="profile-email" disabled
-                 style="background:#f8fafc; color:#64748b;" />
+    </nav>
+    <div class="container">
+        <div class="page-title">My Profile</div>
+        <div class="page-subtitle">Keep your profile updated for better job matches</div>
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <div class="card-title">Personal Details</div>
+                    <div id="alert-profile" class="alert"></div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profile-name" disabled style="background:#f8fafc; color:#64748b;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="profile-email" disabled style="background:#f8fafc; color:#64748b;" />
+                    </div>
+                    <div class="form-group">
+                        <label>CGPA (out of 4.0)</label>
+                        <input type="number" id="profile-cgpa" step="0.01" min="0" max="4.0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Major / Field of Study</label>
+                        <input type="text" id="profile-major" />
+                    </div>
+                    <div class="form-group">
+                        <label>Graduation Year</label>
+                        <input type="number" id="profile-grad-year" />
+                    </div>
+                    <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">Resume</div>
+                    <div id="alert-resume" class="alert"></div>
+                    <div class="form-group">
+                        <label>Paste your resume text below</label>
+                        <textarea id="resume-text" rows="10"
+                            placeholder="Paste your full resume here. The system will automatically extract your skills from this text."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="submitResume()">Save Resume & Extract Skills</button>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <div class="card-title">My Skills</div>
+                    <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
+                        Skills are extracted automatically from your resume.
+                        You can update the proficiency level of each skill below.
+                    </p>
+                    <div id="skills-list">
+                        <div class="empty-state">
+                            <p>No skills found yet. Submit your resume to extract skills.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-          <label>CGPA (out of 4.0)</label>
-          <input type="number" id="profile-cgpa" step="0.01" min="0" max="4.0" />
-        </div>
-        <div class="form-group">
-          <label>Major / Field of Study</label>
-          <input type="text" id="profile-major" />
-        </div>
-        <div class="form-group">
-          <label>Graduation Year</label>
-          <input type="number" id="profile-grad-year" />
-        </div>
-        <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
-      </div>
-
-      <!-- Resume -->
-      <div class="card">
-        <div class="card-title">Resume</div>
-        <div id="alert-resume" class="alert"></div>
-        <div class="form-group">
-          <label>Paste your resume text below</label>
-          <textarea id="resume-text" rows="10"
-            placeholder="Paste your full resume here. Include your experience, education, and skills. The system will automatically extract your skills from this text."></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="submitResume()">Save Resume & Extract Skills</button>
-        <div id="resume-result" style="margin-top:12px;"></div>
-      </div>
     </div>
-
-    <!-- Skills -->
-    <div>
-      <div class="card">
-        <div class="card-title">My Skills</div>
-        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
-          Skills are extracted automatically from your resume.
-          You can update the proficiency level of each skill below.
-        </p>
-        <div id="skills-list">
-          <div class="empty-state">
-            <p>No skills found yet. Submit your resume to extract skills.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script src="/js/auth.js"></script>
-<script src="/js/student.js"></script>
-<script>
-  requireStudent();
-  setNavbarName();
-  loadProfile();
-</script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/student.js"></script>
+    <script>
+        requireStudent();
+        setNavbarName();
+        loadProfile();
+    </script>
 </body>
+
 </html>

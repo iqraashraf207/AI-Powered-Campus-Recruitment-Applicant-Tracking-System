@@ -9,14 +9,36 @@ from utils.db_helpers import (
 
 router = APIRouter()
 
-
 class ApplyInput(BaseModel):
     job_id: int
-
 
 class StatusUpdateInput(BaseModel):
     application_id: int
     new_status: str
+
+
+def verify_job_ownership(cur, job_id: int, recruiter_account_id: int):
+    cur.execute(
+        "SELECT company_id FROM Recruiters WHERE recruiter_id = %s",
+        (recruiter_account_id,)
+    )
+    recruiter = cur.fetchone()
+    if not recruiter:
+        raise HTTPException(status_code = 403, detail = "Recruiter profile not found!")
+
+    cur.execute(
+        "SELECT company_id FROM Job_Posts WHERE job_id = %s",
+        (job_id,)
+    )
+    job = cur.fetchone()
+    if not job:
+        raise HTTPException(status_code = 404, detail = "Job not found!")
+
+    if job["company_id"] != recruiter["company_id"]:
+        raise HTTPException(
+            status_code = 403,
+            detail = "Access denied! This job does not belong to your company."
+        )
 
 
 @router.post("/apply")
@@ -26,10 +48,8 @@ def apply_for_job(
 ):
     student_id = current_user["account_id"]
     result = call_apply_for_job(student_id, data.job_id)
-
     if result.startswith("ERROR"):
-        raise HTTPException(status_code=400, detail=result)
-
+        raise HTTPException(status_code = 400, detail = result)
     return {"message": result}
 
 
@@ -39,7 +59,6 @@ def get_my_applications(current_user: dict = Depends(get_current_student)):
     cur = get_cursor(conn)
     try:
         student_id = current_user["account_id"]
-
         cur.execute(
             """
             SELECT
@@ -60,9 +79,8 @@ def get_my_applications(current_user: dict = Depends(get_current_student)):
         )
         applications = cur.fetchall()
         return [dict(a) for a in applications]
-
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code = 500, detail = str(e))
     finally:
         cur.close()
         conn.close()
@@ -76,15 +94,17 @@ def get_ranked_applicants(
     conn = get_db()
     cur = get_cursor(conn)
     try:
+        verify_job_ownership(cur, job_id, current_user["account_id"])
         cur.execute(
             "SELECT * FROM Top_Ranked_Applicants_View WHERE job_id = %s",
             (job_id,)
         )
         applicants = cur.fetchall()
         return [dict(a) for a in applicants]
-
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code = 500, detail = str(e))
     finally:
         cur.close()
         conn.close()
@@ -98,19 +118,33 @@ def get_eligible_students(
     conn = get_db()
     cur = get_cursor(conn)
     try:
+        verify_job_ownership(cur, job_id, current_user["account_id"])
         cur.execute(
-            "SELECT * FROM Eligible_Students_View WHERE job_id = %s",
-            (job_id,)
-        )
+        """
+        SELECT 
+            esv.student_name,
+            esv.cgpa,
+            esv.major,
+            esv.graduation_year,
+            COALESCE(app.status, 'not applied') AS application_status
+        FROM Eligible_Students_View esv
+        LEFT JOIN Applications app 
+            ON esv.student_id = app.student_id 
+            AND app.job_id = %s
+        WHERE esv.job_id = %s
+        ORDER BY esv.cgpa DESC
+        """,
+        (job_id, job_id)
+    )
         students = cur.fetchall()
         return [dict(s) for s in students]
-
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code = 500, detail = str(e))
     finally:
         cur.close()
         conn.close()
-
 
 @router.put("/status")
 def update_status(
@@ -123,10 +157,8 @@ def update_status(
         data.new_status,
         performed_by
     )
-
     if result.startswith("ERROR"):
-        raise HTTPException(status_code=400, detail=result)
-
+        raise HTTPException(status_code = 400, detail = result)
     return {"message": result}
 
 
@@ -138,6 +170,7 @@ def rerank_applicants(
     conn = get_db()
     cur = get_cursor(conn)
     try:
+        verify_job_ownership(cur, job_id, current_user["account_id"])
         cur.execute(
             """
             SELECT application_id FROM Applications
@@ -147,25 +180,23 @@ def rerank_applicants(
             (job_id,)
         )
         applications = cur.fetchall()
-
         if not applications:
-            return {"message": "No applications found for this job."}
-
+            return {"message": "No applications found for this job!"}
         for app in applications:
             cur.execute(
                 "SELECT Calculate_Match_Score(%s)",
                 (app["application_id"],)
             )
-
         conn.commit()
         return {
-            "message": f"Scores recalculated for {len(applications)} applications.",
+            "message": f"Scores recalculated for {len(applications)} applications!",
             "job_id": job_id
         }
-
+    except HTTPException:
+        raise
     except Exception as e:
         conn.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code = 500, detail = str(e))
     finally:
         cur.close()
         conn.close()

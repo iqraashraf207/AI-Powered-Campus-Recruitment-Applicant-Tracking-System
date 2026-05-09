@@ -1,14 +1,8 @@
-import psycopg2
 from database.session import get_db, get_cursor
 
-
 def call_apply_for_job(student_id: int, job_id: int) -> str:
-    """
-    Calls the Apply_For_Job stored procedure.
-    Returns the result message (SUCCESS, REJECTED, or ERROR).
-    """
     conn = get_db()
-    cur  = conn.cursor()
+    cur = get_cursor(conn)
     try:
         cur.execute(
             "SELECT Apply_For_Job(%s, %s) AS result",
@@ -17,8 +11,8 @@ def call_apply_for_job(student_id: int, job_id: int) -> str:
         row = cur.fetchone()
         conn.commit()
         if row is None:
-            return "ERROR: No response from database."
-        return row[0]
+            return "ERROR: No response from database!"
+        return row["result"]
     except Exception as e:
         conn.rollback()
         return f"ERROR: {str(e)}"
@@ -28,12 +22,8 @@ def call_apply_for_job(student_id: int, job_id: int) -> str:
 
 
 def call_calculate_match_score(application_id: int) -> None:
-    """
-    Calls the Calculate_Match_Score stored procedure manually.
-    Normally called automatically by the database trigger.
-    """
     conn = get_db()
-    cur  = conn.cursor()
+    cur = get_cursor(conn)
     try:
         cur.execute(
             "SELECT Calculate_Match_Score(%s)",
@@ -53,12 +43,8 @@ def call_update_application_status(
     new_status: str,
     performed_by: int
 ) -> str:
-    """
-    Calls the Update_Application_Status stored procedure.
-    Returns the result message (SUCCESS or ERROR).
-    """
     conn = get_db()
-    cur  = conn.cursor()
+    cur = get_cursor(conn)
     try:
         cur.execute(
             "SELECT Update_Application_Status(%s, %s, %s) AS result",
@@ -67,8 +53,8 @@ def call_update_application_status(
         row = cur.fetchone()
         conn.commit()
         if row is None:
-            return "ERROR: No response from database."
-        return row[0]
+            return "ERROR: No response from database!"
+        return row["result"]
     except Exception as e:
         conn.rollback()
         return f"ERROR: {str(e)}"
@@ -78,12 +64,8 @@ def call_update_application_status(
 
 
 def call_generate_recommendations(student_id: int) -> list:
-    """
-    Calls the Generate_Job_Recommendations stored procedure.
-    Returns a list of recommended jobs with fit scores.
-    """
     conn = get_db()
-    cur  = get_cursor(conn)
+    cur = get_cursor(conn)
     try:
         cur.execute(
             "SELECT * FROM Generate_Job_Recommendations(%s)",

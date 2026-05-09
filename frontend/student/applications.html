@@ -1,63 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Applications — CampusRecruit</title>
-  <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <title>My Applications | CampusRecruit</title>
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
+
 <body>
-
-<nav class="navbar">
-  <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
-  <ul class="navbar-links">
-    <li><a href="/student/dashboard.html">Dashboard</a></li>
-    <li><a href="/student/jobs.html">Browse Jobs</a></li>
-    <li><a href="/student/applications.html" class="active">My Applications</a></li>
-    <li><a href="/student/recommendations.html">Recommendations</a></li>
-    <li><a href="/student/profile.html">Profile</a></li>
-  </ul>
-  <div class="navbar-user">
-    <span id="navbar-name"></span>
-    <button class="btn-logout" onclick="logout()">Logout</button>
-  </div>
-</nav>
-
-<div class="container">
-  <div class="page-title">My Applications</div>
-  <div class="page-subtitle">Track the status of all your job applications</div>
-
-  <div id="alert-apps" class="alert"></div>
-
-  <div class="card">
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Job Title</th>
-            <th>Company</th>
-            <th>Match Score</th>
-            <th>Rank</th>
-            <th>Status</th>
-            <th>Applied On</th>
-          </tr>
-        </thead>
-        <tbody id="applications-body">
-          <tr><td colspan="6" style="text-align:center; padding:32px; color:#64748b;">
-            Loading applications...
-          </td></tr>
-        </tbody>
-      </table>
+    <nav class="navbar">
+        <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
+        <ul class="navbar-links">
+            <li><a href="/student/dashboard.html">Dashboard</a></li>
+            <li><a href="/student/jobs.html">Browse Jobs</a></li>
+            <li><a href="/student/applications.html" class="active">My Applications</a></li>
+            <li><a href="/student/recommendations.html">Recommendations</a></li>
+            <li><a href="/student/profile.html">Profile</a></li>
+        </ul>
+        <div class="navbar-user">
+            <span id="navbar-name"></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-title">My Applications</div>
+        <div class="page-subtitle">Track the status of all your job applications</div>
+        <div id="alert-apps" class="alert"></div>
+        <div class="card">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Match Score</th>
+                            <th>Rank</th>
+                            <th>Status</th>
+                            <th>Applied On</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applications-body">
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding:32px; color:#64748b;">
+                                Loading applications...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-<script src="/js/auth.js"></script>
-<script src="/js/student.js"></script>
-<script>
-  requireStudent();
-  setNavbarName();
-  loadApplications();
-</script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/student.js"></script>
+    <script>
+        requireStudent();
+        setNavbarName();
+        loadApplications();
+    </script>
 </body>
+
 </html>
