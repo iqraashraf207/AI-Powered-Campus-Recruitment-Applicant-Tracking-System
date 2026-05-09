@@ -1,4 +1,4 @@
-const API = 'https://your-app.up.railway.app';
+const API = 'https://ai-powered-campus-recruitment-applicant-tracking-production.up.railway.app';
 
 
 function saveUser(data) {
