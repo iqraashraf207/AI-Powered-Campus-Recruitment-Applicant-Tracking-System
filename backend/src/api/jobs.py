@@ -224,3 +224,51 @@ def get_my_job_postings(current_user: dict = Depends(get_current_recruiter)):
     finally:
         cur.close()
         conn.close()
+
+        
+@router.delete("/{job_id}")
+def delete_job(
+    job_id: int,
+    current_user: dict = Depends(get_current_recruiter)
+):
+    """
+    Closes (soft-deletes) a job posting. Only the recruiter who owns
+    the company that posted the job can do this.
+    If no applications exist, it hard-deletes the job.
+    """
+    conn = get_db()
+    cur  = get_cursor(conn)
+    try:
+        recruiter_id = current_user["account_id"]
+
+        cur.execute("""
+            SELECT jp.job_id FROM Job_Posts jp
+            JOIN Recruiters r ON jp.company_id = r.company_id
+            WHERE jp.job_id = %s AND r.recruiter_id = %s
+        """, (job_id, recruiter_id))
+        job = cur.fetchone()
+
+        if not job:
+            raise HTTPException(status_code=403, detail="Job not found or not yours.")
+
+        cur.execute("SELECT COUNT(*) AS cnt FROM Applications WHERE job_id = %s", (job_id,))
+        count = cur.fetchone()["cnt"]
+
+        if count > 0:
+            cur.execute("UPDATE Job_Posts SET status = 'closed' WHERE job_id = %s", (job_id,))
+            conn.commit()
+            return {"message": "Job closed (it has applications, so it was not permanently deleted)."}
+        else:
+            cur.execute("DELETE FROM Job_Required_Skills WHERE job_id = %s", (job_id,))
+            cur.execute("DELETE FROM Job_Posts WHERE job_id = %s", (job_id,))
+            conn.commit()
+            return {"message": "Job deleted successfully."}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cur.close()
+        conn.close()
