@@ -11,7 +11,7 @@ class RegisterInput(BaseModel):
     password: str
     role: str  
 
-\    cgpa: float = None
+    cgpa: float = None
     major: str = None
     graduation_year: int = None
 
