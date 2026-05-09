@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browse Jobs — CampusRecruit</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
+  <ul class="navbar-links">
+    <li><a href="/student/dashboard.html">Dashboard</a></li>
+    <li><a href="/student/jobs.html" class="active">Browse Jobs</a></li>
+    <li><a href="/student/applications.html">My Applications</a></li>
+    <li><a href="/student/recommendations.html">Recommendations</a></li>
+    <li><a href="/student/profile.html">Profile</a></li>
+  </ul>
+  <div class="navbar-user">
+    <span id="navbar-name"></span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-title">Browse Job Openings</div>
+  <div class="page-subtitle">All active job postings available for application</div>
+
+  <div class="card">
+    <div style="margin-bottom:16px;">
+      <input type="text" id="search-input" placeholder="Search by job title or company..."
+             oninput="filterJobs()"
+             style="width:100%; padding:10px 14px; border:1px solid #e2e8f0;
+                    border-radius:8px; font-size:14px; outline:none;" />
+    </div>
+
+    <div id="alert-jobs" class="alert"></div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Salary</th>
+            <th>Min CGPA</th>
+            <th>Deadline</th>
+            <th>Required Skills</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="jobs-table-body">
+          <tr><td colspan="8" style="text-align:center; padding:32px; color:#64748b;">
+            Loading jobs...
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="/js/auth.js"></script>
+<script src="/js/student.js"></script>
+<script>
+  requireStudent();
+  setNavbarName();
+  loadJobs();
+</script>
+</body>
+</html>

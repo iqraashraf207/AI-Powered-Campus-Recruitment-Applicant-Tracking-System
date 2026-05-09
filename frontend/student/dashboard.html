@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — CampusRecruit</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
+  <ul class="navbar-links">
+    <li><a href="/student/dashboard.html" class="active">Dashboard</a></li>
+    <li><a href="/student/jobs.html">Browse Jobs</a></li>
+    <li><a href="/student/applications.html">My Applications</a></li>
+    <li><a href="/student/recommendations.html">Recommendations</a></li>
+    <li><a href="/student/profile.html">Profile</a></li>
+  </ul>
+  <div class="navbar-user">
+    <span id="navbar-name"></span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-title" id="greeting">Welcome back</div>
+  <div class="page-subtitle">Here is your recruitment overview</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Applications Sent</div>
+      <div class="stat-value" id="stat-total">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Shortlisted</div>
+      <div class="stat-value" id="stat-shortlisted" style="color:#16a34a;">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Accepted</div>
+      <div class="stat-value" id="stat-accepted" style="color:#1a56db;">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Your CGPA</div>
+      <div class="stat-value" id="stat-cgpa" style="color:#1e293b;">—</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">Recent Applications</div>
+      <div id="recent-applications">
+        <div class="empty-state"><p>No applications yet.</p>
+          <a href="/student/jobs.html" class="btn btn-primary btn-sm">Browse Jobs</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Top Job Recommendations</div>
+      <div id="recommendations">
+        <div class="empty-state"><p>No recommendations yet.</p>
+          <a href="/student/profile.html" class="btn btn-primary btn-sm">Complete Profile</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/js/auth.js"></script>
+<script src="/js/student.js"></script>
+<script>
+  requireStudent();
+  setNavbarName();
+  document.getElementById('greeting').textContent = 'Welcome back, ' + getName();
+  loadDashboard();
+</script>
+</body>
+</html>

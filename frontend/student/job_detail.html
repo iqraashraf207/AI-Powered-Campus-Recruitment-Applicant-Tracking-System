@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Detail — CampusRecruit</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-logo">Campus<span style="color:#60a5fa;">Recruit</span></div>
+  <ul class="navbar-links">
+    <li><a href="/student/dashboard.html">Dashboard</a></li>
+    <li><a href="/student/jobs.html" class="active">Browse Jobs</a></li>
+    <li><a href="/student/applications.html">My Applications</a></li>
+    <li><a href="/student/recommendations.html">Recommendations</a></li>
+    <li><a href="/student/profile.html">Profile</a></li>
+  </ul>
+  <div class="navbar-user">
+    <span id="navbar-name"></span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div style="margin-bottom:16px;">
+    <a href="/student/jobs.html"
+       style="font-size:13px; color:#1a56db; font-weight:600;">
+      ← Back to Jobs
+    </a>
+  </div>
+
+  <div id="alert-detail" class="alert"></div>
+
+  <div class="card" id="job-detail-card">
+    <div style="text-align:center; padding:32px; color:#64748b;">
+      Loading job details...
+    </div>
+  </div>
+</div>
+
+<script src="/js/auth.js"></script>
+<script src="/js/student.js"></script>
+<script>
+  requireStudent();
+  setNavbarName();
+  loadJobDetail();
+</script>
+</body>
+</html>

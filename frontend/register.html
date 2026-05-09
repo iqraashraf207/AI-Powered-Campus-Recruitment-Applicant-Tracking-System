@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — Campus Recruitment</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-logo">CampusRecruit</div>
+    <div class="auth-tagline">Create your account</div>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="register-form">
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Your full name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="reg-email">Email Address</label>
+        <input type="email" id="reg-email" placeholder="you@example.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" placeholder="Create a password" required />
+      </div>
+
+      <div class="form-group">
+        <label for="role">I am registering as</label>
+        <select id="role" required>
+          <option value="">Select your role</option>
+          <option value="student">Student</option>
+          <option value="recruiter">Recruiter</option>
+        </select>
+      </div>
+
+      <div id="student-fields" style="display:none;">
+        <div class="form-group">
+          <label for="cgpa">CGPA (out of 4.0)</label>
+          <input type="number" id="cgpa" step="0.01" min="0" max="4.0" placeholder="e.g. 3.5" />
+        </div>
+        <div class="form-group">
+          <label for="major">Major / Field of Study</label>
+          <input type="text" id="major" placeholder="e.g. Computer Science" />
+        </div>
+        <div class="form-group">
+          <label for="grad-year">Graduation Year</label>
+          <input type="number" id="grad-year" placeholder="e.g. 2025" />
+        </div>
+      </div>
+
+      <div id="recruiter-fields" style="display:none;">
+        <div class="form-group">
+          <label for="company-select">Select Your Company</label>
+          <select id="company-select">
+            <option value="">Loading companies...</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">
+        Create Account
+      </button>
+
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/index.html">Sign in here</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="/js/auth.js"></script>
+</body>
+</html>
